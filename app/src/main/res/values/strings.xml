@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">PicaPress Studio</string>
+    <string name="nav_missions">Missions</string>
+    <string name="nav_workbench">Spread Studio</string>
+    <string name="nav_typelab">Type Lab</string>
+    <string name="nav_preflight">Preflight</string>
+    <string name="nav_showdown">ID vs QXP</string>
+    <string name="hero_banner_desc">Swiss desktop publishing editorial spread illustration</string>
+    <string name="preflight_ready">PREFLIGHT: 0 ERRORS (PRESS READY)</string>
+    <string name="preflight_errors_format">PREFLIGHT: %1$d ERRORS DETECTED</string>
+    <string name="toggle_preview_mode">Toggle Normal / Preview Mode (W)</string>
+    <string name="run_press_check">Run Preflight &amp; Print Check</string>
+    <string name="save_custom_spread">Save Spread to Portfolio</string>
+</resources>

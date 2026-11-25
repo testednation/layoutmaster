@@ -1,0 +1,6 @@
+{
+  "name": "PicaPress Studio",
+  "description": "Interactive desktop publishing and page layout design game teaching InDesign and QuarkXPress workflows, typography, grids, master pages, and preflighting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

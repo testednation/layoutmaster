@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PicaPress Studio — Desktop Publishing Learning Game (Web Edition)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Studio Bar -->
+    <header class="studio-topbar">
+      <div class="brand-cluster">
+        <div class="brand-mark" aria-hidden="true">Pp</div>
+        <div>
+          <div class="brand-title">PicaPress Studio</div>
+          <div class="brand-sub">Desktop Publishing Trainer • InDesign &amp; QuarkXPress</div>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button id="softwareToggleBtn" class="mode-pill indesign" type="button" title="Switch InDesign / QuarkXPress terminology">
+          Id • InDesign Mode ⇄
+        </button>
+        <div class="rank-pill" id="rankBadge">Rank: Apprentice</div>
+      </div>
+    </header>
+
+    <!-- Primary Workspace Navigation -->
+    <nav class="primary-nav" aria-label="Studio Sections">
+      <button class="nav-btn active" data-tab="campaign">Missions</button>
+      <button class="nav-btn" data-tab="workbench">Workbench &amp; Masters</button>
+      <button class="nav-btn" data-tab="typelab">Type, Hierarchy &amp; Grids</button>
+      <button class="nav-btn" data-tab="prepress">Preflight, Color &amp; PDF</button>
+      <button class="nav-btn" data-tab="showdown">Id vs QXP Quiz</button>
+    </nav>
+
+    <!-- Main Content Viewport -->
+    <main class="workspace-main">
+      <!-- ==================== 1. CAMPAIGN / MISSIONS ==================== -->
+      <section id="tab-campaign" class="tab-panel active">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <div class="badge-row">
+              <span class="chip chip-id">Id • INDESIGN</span>
+              <span class="chip chip-qxp">QXP • QUARKXPRESS</span>
+              <span class="chip chip-cyan">WEB EDITION</span>
+            </div>
+            <h1>Master Grids, Typography &amp; Print Production</h1>
+            <p>
+              Hands-on desktop publishing labs teaching picas, optical kerning, article hierarchy,
+              modular grids, master pages, live preflight, CMYK color calibration, and print-ready PDF exports.
+            </p>
+            <div class="quick-launch-grid">
+              <button class="btn btn-cyan" data-jump="workbench:spread">Spread Layout Workbench</button>
+              <button class="btn btn-teal" data-jump="workbench:masters">Master Pages Simulator</button>
+              <button class="btn btn-magenta" data-jump="typelab:hierarchy">Typography Hierarchy Repair</button>
+              <button class="btn btn-green" data-jump="typelab:grids">Grid Design Principles</button>
+              <button class="btn btn-gold" data-jump="prepress:preflight">Live Preflight Challenge</button>
+              <button class="btn btn-cyan" data-jump="prepress:color">CMYK &amp; Bleed Color Lab</button>
+              <button class="btn btn-magenta" data-jump="prepress:pdf">Print-Ready PDF Export Dialog</button>
+              <button class="btn btn-outline" data-jump="showdown:quiz">InDesign vs Quark Showdown</button>
+            </div>
+          </div>
+
+          <div class="stats-column">
+            <div class="stat-tile">
+              <span class="stat-label">COMPLETED LABS</span>
+              <strong id="statCompleted" class="stat-val gold">0</strong>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-label">BEST QUIZ ACCURACY</span>
+              <strong id="statQuiz" class="stat-val cyan">0%</strong>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-label">PRESS CERTIFICATIONS</span>
+              <strong id="statCerts" class="stat-val green">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Pica / Point / Inch / mm Ruler -->
+        <div class="studio-card">
+          <div class="card-head">
+            <div>
+              <h2>Interactive Pica &amp; Point Ruler Converter</h2>
+              <p class="muted">1 inch = 6 picas (6p0) = 72 PostScript points = 25.4 mm</p>
+            </div>
+            <span class="mono-tag gold">DTP MEASURE</span>
+          </div>
+          <div class="pica-readout-grid">
+            <div class="readout-box">
+              <span>DTP NOTATION</span>
+              <strong id="picaNotation" class="cyan">3p6</strong>
+            </div>
+            <div class="readout-box">
+              <span>POINTS</span>
+              <strong id="picaPoints" class="gold">42 pt</strong>
+            </div>
+            <div class="readout-box">
+              <span>INCHES / MM</span>
+              <strong id="picaMetric">0.58" • 14.8 mm</strong>
+            </div>
+          </div>
+          <input id="picaSlider" type="range" min="0.5" max="12" step="0.5" value="3.5" class="studio-slider" />
+        </div>
+      </section>
+
+      <!-- ==================== 2. WORKBENCH & MASTER PAGES ==================== -->
+      <section id="tab-workbench" class="tab-panel">
+        <div class="subnav-row">
+          <button class="sub-btn active" data-sub="workbench:spread">Spread Layout Editor</button>
+          <button class="sub-btn" data-sub="workbench:masters">Master Pages Simulator</button>
+        </div>
+
+        <!-- Sub: Spread Layout -->
+        <div id="sub-workbench-spread" class="sub-panel active">
+          <div class="split-layout">
+            <div class="studio-card">
+              <div class="card-head">
+                <div>
+                  <h2 id="wbTitle">Interactive Spread Pasteboard</h2>
+                  <p class="muted">Adjust columns, margins, bleed, and baseline grids in real time.</p>
+                </div>
+                <button id="wbPreviewToggle" class="btn btn-outline btn-sm" type="button">Clean Preview (W)</button>
+              </div>
+              <div id="wbSpreadStage" class="spread-stage"></div>
+            </div>
+
+            <div class="studio-card controls-stack">
+              <h3>Layout Controls</h3>
+              <div class="control-group">
+                <label>Columns per Page <span id="wbColsVal" class="mono-val">3</span></label>
+                <input id="wbCols" type="range" min="1" max="4" step="1" value="3" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Gutter Width <span id="wbGutterVal" class="mono-val">1p0 (12pt)</span></label>
+                <input id="wbGutter" type="range" min="4" max="24" step="2" value="12" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Page Margins <span id="wbMarginVal" class="mono-val">3p0 (36pt)</span></label>
+                <input id="wbMargin" type="range" min="12" max="48" step="4" value="28" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Bleed Allowance <span id="wbBleedVal" class="mono-val">3.0 mm</span></label>
+                <input id="wbBleed" type="range" min="0" max="5" step="1" value="3" class="studio-slider" />
+              </div>
+              <label class="check-row">
+                <input id="wbBaseline" type="checkbox" checked />
+                <span>Show Baseline Grid (12 pt rhythm)</span>
+              </label>
+              <label class="check-row">
+                <input id="wbTextWrap" type="checkbox" checked />
+                <span id="wbWrapLabel">Enable Text Wrap / Runaround around Hero Frame</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub: Master Pages Simulator -->
+        <div id="sub-workbench-masters" class="sub-panel">
+          <div class="split-layout">
+            <div class="studio-card">
+              <div class="card-head">
+                <div>
+                  <h2 id="masterHeading">A-Master Propagation Preview</h2>
+                  <p class="muted">Edits on the Master template propagate instantly across Pages 2–5.</p>
+                </div>
+                <span class="mono-tag teal">AUTO-FOLIO ACTIVE</span>
+              </div>
+              <div id="masterPagesGrid" class="master-pages-grid"></div>
+            </div>
+
+            <div class="studio-card controls-stack">
+              <h3>Master Page Elements</h3>
+              <div class="control-group">
+                <label>Running Header Text</label>
+                <input id="masterHeaderInput" type="text" class="text-input" value="PICAPRESS DESIGN ANNUAL • ISSUE 14" />
+              </div>
+              <div class="control-group">
+                <label>Running Footer Text</label>
+                <input id="masterFooterInput" type="text" class="text-input" value="SWISS EDITORIAL ARCHIVE" />
+              </div>
+              <div class="control-group">
+                <label>Page Numbering Style</label>
+                <select id="masterFolioStyle" class="select-input">
+                  <option value="arabic">Arabic Numerals (2, 3, 4, 5)</option>
+                  <option value="padded">Zero-Padded (02, 03, 04, 05)</option>
+                  <option value="roman">Roman Numerals (II, III, IV, V)</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label>Folio Placement</label>
+                <select id="masterFolioPos" class="select-input">
+                  <option value="outer">Outer Margins (Mirrored Facing Pages)</option>
+                  <option value="center">Bottom Center</option>
+                  <option value="top">Top Outer Corners</option>
+                </select>
+              </div>
+              <label class="check-row">
+                <input id="masterHeaderRule" type="checkbox" checked />
+                <span>Include 0.5pt Header Accent Rule</span>
+              </label>
+              <label class="check-row">
+                <input id="masterOverrideP4" type="checkbox" />
+                <span>Override &amp; Suppress Master on Page 4 (Full-Bleed Opener)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 3. TYPE, HIERARCHY & GRIDS ==================== -->
+      <section id="tab-typelab" class="tab-panel">
+        <div class="subnav-row">
+          <button class="sub-btn active" data-sub="typelab:hierarchy">Article Hierarchy Repair</button>
+          <button class="sub-btn" data-sub="typelab:anatomy">Font Anatomy &amp; Kerning</button>
+          <button class="sub-btn" data-sub="typelab:grids">Grid Design Principles</button>
+        </div>
+
+        <!-- Sub: Article Hierarchy Repair -->
+        <div id="sub-typelab-hierarchy" class="sub-panel active">
+          <div class="split-layout">
+            <div class="studio-card">
+              <div class="card-head">
+                <div>
+                  <h2>Mock Editorial Article Proof</h2>
+                  <p class="muted">Click any block (Kicker, Headline, Deck, Body) to adjust tracking, leading, and pair kerning.</p>
+                </div>
+                <div class="btn-row">
+                  <button id="hierMetricsBtn" class="btn btn-outline btn-sm" type="button">Metrics On</button>
+                  <button id="hierCompareBtn" class="btn btn-outline btn-sm" type="button">Compare Broken</button>
+                </div>
+              </div>
+
+              <div class="chip-bar" id="hierCaseChips"></div>
+              <div id="hierArticleSheet" class="editorial-paper"></div>
+            </div>
+
+            <div class="studio-card controls-stack">
+              <div class="card-head">
+                <h3 id="hierInspectorTitle">Character Panel</h3>
+                <span id="hierScoreBadge" class="mono-tag gold">0% Clarity</span>
+              </div>
+
+              <div class="chip-bar" id="hierElementTabs"></div>
+              <div id="hierSlidersContainer" class="controls-stack"></div>
+
+              <div class="checklist-box">
+                <h4>Hierarchy Diagnostics</h4>
+                <div id="hierChecklist" class="diag-list"></div>
+              </div>
+
+              <div class="btn-row">
+                <button id="hierResetBtn" class="btn btn-outline btn-sm" type="button">Reset Broken</button>
+                <button id="hierIdealBtn" class="btn btn-outline btn-sm" type="button">Show Ideal</button>
+                <button id="hierCertifyBtn" class="btn btn-cyan btn-sm" type="button">Certify Hierarchy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub: Font Anatomy & Kerning -->
+        <div id="sub-typelab-anatomy" class="sub-panel">
+          <div class="split-layout">
+            <div class="studio-card">
+              <div class="card-head">
+                <div>
+                  <h2>Font Anatomy, Kerning &amp; Leading Specimen</h2>
+                  <p class="muted">Inspect Cap Height, x-Height, Baseline &amp; Descender guides as you tune typography live.</p>
+                </div>
+                <span class="mono-tag cyan">LIVE METRICS</span>
+              </div>
+              <div class="anatomy-stage">
+                <div class="anatomy-guide cap-line"><span>Cap Height</span></div>
+                <div class="anatomy-guide x-line"><span>x-Height</span></div>
+                <div class="anatomy-guide base-line"><span>Baseline</span></div>
+                <div id="anatomySpecimen" class="anatomy-specimen">
+                  <span id="anatCharA">A</span><span id="anatCharV">V</span><span>A</span><span>N</span><span>T</span><span>&nbsp;</span><span>T</span><span>y</span><span>p</span><span>e</span>
+                </div>
+              </div>
+              <p id="anatomyLeadPreview" class="anatomy-lead-preview">
+                Good typography is invisible until spacing fails. Adjust the leading slider to compare cramped line stacks against open, readable editorial rhythm across multiple lines of prose.
+              </p>
+            </div>
+
+            <div class="studio-card controls-stack">
+              <h3>Specimen Sliders</h3>
+              <div class="control-group">
+                <label>Pair Kerning (A/V) <span id="anatKernVal" class="mono-val">-40</span></label>
+                <input id="anatKern" type="range" min="-120" max="100" step="5" value="-40" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Tracking (Whole Word) <span id="anatTrackVal" class="mono-val">0</span></label>
+                <input id="anatTrack" type="range" min="-60" max="160" step="5" value="0" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Body Leading Ratio <span id="anatLeadVal" class="mono-val">1.45x</span></label>
+                <input id="anatLead" type="range" min="0.95" max="2.10" step="0.05" value="1.45" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Typeface</label>
+                <select id="anatFont" class="select-input">
+                  <option value="'Playfair Display', serif">Playfair Display (Transitional Serif)</option>
+                  <option value="'Space Grotesk', sans-serif">Space Grotesk (Geometric Sans)</option>
+                  <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans (Neo-Grotesque)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub: Grid Design Principles -->
+        <div id="sub-typelab-grids" class="sub-panel">
+          <div class="split-layout">
+            <div class="studio-card">
+              <div class="card-head">
+                <div>
+                  <h2>Interactive Grid Principles Canvas</h2>
+                  <p class="muted">Toggle columns, gutters, margins, text alignment, and image snapping.</p>
+                </div>
+                <button id="gridGuidesBtn" class="btn btn-outline btn-sm" type="button">Guides On</button>
+              </div>
+              <div id="gridPreviewStage" class="grid-paper-stage"></div>
+              <div id="gridTelemetry" class="telemetry-bar"></div>
+            </div>
+
+            <div class="studio-card controls-stack">
+              <h3>Grid Controls</h3>
+              <div class="control-group">
+                <label>Column Count <span id="gridColsVal" class="mono-val">3 cols</span></label>
+                <input id="gridCols" type="range" min="1" max="4" step="1" value="3" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Gutter Width <span id="gridGutterVal" class="mono-val">16 px</span></label>
+                <input id="gridGutter" type="range" min="4" max="32" step="2" value="16" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Outer Margin <span id="gridMarginVal" class="mono-val">24 px</span></label>
+                <input id="gridMargin" type="range" min="8" max="44" step="4" value="24" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Text Alignment</label>
+                <select id="gridAlign" class="select-input">
+                  <option value="left">Flush Left (Rag Right — Recommended)</option>
+                  <option value="justify">Justified (Watch Narrow Rivers)</option>
+                  <option value="center">Centered (Display Only Warning)</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label>Hero Image Placement</label>
+                <select id="gridImageSpan" class="select-input">
+                  <option value="span2">Span 2 Columns (Asymmetric)</option>
+                  <option value="span1">Span 1 Column</option>
+                  <option value="full">Full Margin Width</option>
+                  <option value="offgrid">Off-Grid Misaligned (Broken)</option>
+                </select>
+              </div>
+              <label class="check-row">
+                <input id="gridModularRows" type="checkbox" checked />
+                <span>Show Horizontal Modular Flowlines</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 4. PREFLIGHT, COLOR & PDF EXPORT ==================== -->
+      <section id="tab-prepress" class="tab-panel">
+        <div class="subnav-row">
+          <button class="sub-btn active" data-sub="prepress:preflight">Live Preflight Challenge</button>
+          <button class="sub-btn" data-sub="prepress:color">Color Management &amp; Bleed</button>
+          <button class="sub-btn" data-sub="prepress:pdf">Print-Ready PDF Export Dialog</button>
+        </div>
+
+        <!-- Sub: Preflight -->
+        <div id="sub-prepress-preflight" class="sub-panel active">
+          <div class="split-layout">
+            <div class="studio-card">
+              <div class="card-head">
+                <div>
+                  <h2>Live Preflight Document Inspector</h2>
+                  <p class="muted">Identify and fix overset text, low-res 72 PPI links, and missing fonts before press export.</p>
+                </div>
+                <span id="pfStatusLight" class="mono-tag red">3 ERRORS</span>
+              </div>
+              <div id="pfDocStage" class="editorial-paper pf-doc-stage"></div>
+            </div>
+
+            <div class="studio-card controls-stack">
+              <h3>Preflight Panel Errors</h3>
+              <div id="pfErrorList" class="diag-list"></div>
+              <div class="btn-row">
+                <button id="pfResetBtn" class="btn btn-outline btn-sm" type="button">Reset Document</button>
+                <button id="pfCertifyBtn" class="btn btn-green btn-sm" type="button">Package for Press</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub: Color Management -->
+        <div id="sub-prepress-color" class="sub-panel">
+          <div class="split-layout">
+            <div class="studio-card">
+              <div class="card-head">
+                <div>
+                  <h2>CMYK vs RGB Soft-Proof &amp; Bleed Calibrator</h2>
+                  <p class="muted">Match the target printed swatch (&Delta;E &le; 6) and configure safe 3 mm bleed.</p>
+                </div>
+                <span id="cmDeltaBadge" class="mono-tag gold">&Delta;E 24.0</span>
+              </div>
+              <div class="swatch-compare-row">
+                <div class="swatch-card">
+                  <span>TARGET PRINT SWATCH</span>
+                  <div id="cmTargetSwatch" class="swatch-block"></div>
+                  <small id="cmTargetSpec" class="muted">C:85 M:20 Y:10 K:5 • FOGRA39</small>
+                </div>
+                <div class="swatch-card">
+                  <span>YOUR OUTPUT PROOF</span>
+                  <div id="cmUserSwatch" class="swatch-block"></div>
+                  <small id="cmUserSpec" class="muted">TAC: 120%</small>
+                </div>
+              </div>
+              <div id="cmBleedDemo" class="bleed-visualizer"></div>
+            </div>
+
+            <div class="studio-card controls-stack">
+              <h3>Ink Channels &amp; ICC Profile</h3>
+              <div class="control-group">
+                <label>Working Profile</label>
+                <select id="cmProfile" class="select-input">
+                  <option value="srgb">sRGB IEC61966-2.1 (RGB Gamut Warning)</option>
+                  <option value="fogra39" selected>Coated FOGRA39 (ISO 12647-2)</option>
+                  <option value="swop">U.S. Web Coated (SWOP) v2</option>
+                  <option value="uncoated">Uncoated FOGRA29</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label>Cyan (C) <span id="cmCVal" class="mono-val cyan">20%</span></label>
+                <input id="cmC" type="range" min="0" max="100" value="20" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Magenta (M) <span id="cmMVal" class="mono-val magenta">65%</span></label>
+                <input id="cmM" type="range" min="0" max="100" value="65" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Yellow (Y) <span id="cmYVal" class="mono-val gold">30%</span></label>
+                <input id="cmY" type="range" min="0" max="100" value="30" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Key Black (K) <span id="cmKVal" class="mono-val">10%</span></label>
+                <input id="cmK" type="range" min="0" max="100" value="10" class="studio-slider" />
+              </div>
+              <div class="control-group">
+                <label>Document Bleed <span id="cmBleedVal" class="mono-val">0 mm</span></label>
+                <input id="cmBleed" type="range" min="0" max="5" step="1" value="0" class="studio-slider" />
+              </div>
+              <button id="cmCheckBtn" class="btn btn-cyan" type="button">Approve Color Proof</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub: Print-Ready PDF Export Dialog -->
+        <div id="sub-prepress-pdf" class="sub-panel">
+          <div class="split-layout">
+            <div class="studio-card">
+              <div class="card-head">
+                <div>
+                  <h2 id="pdfDialogTitle">Export Adobe PDF — Live Press Sheet</h2>
+                  <p class="muted">Configure PDF/X standard, DPI, trim &amp; registration marks, bleed, and CMYK output intent.</p>
+                </div>
+                <span id="pdfSizeTag" class="mono-tag gold">Est. 1.2 MB</span>
+              </div>
+
+              <div class="chip-bar" id="pdfBriefChips"></div>
+              <div id="pdfBriefSummary" class="spec-banner"></div>
+              <div id="pdfPressSheet" class="press-sheet-stage"></div>
+            </div>
+
+            <div class="studio-card dialog-window">
+              <div class="dialog-chrome">
+                <div class="dots">
+                  <span class="dot red"></span><span class="dot gold"></span><span class="dot green"></span>
+                </div>
+                <span id="pdfChromeTitle">Export Adobe PDF</span>
+                <select id="pdfPresetSelect" class="select-input compact">
+                  <option value="smallest">[Smallest File Size]</option>
+                  <option value="hq">[High Quality Print]</option>
+                  <option value="x1a">[PDF/X-1a:2001]</option>
+                  <option value="x4">[PDF/X-4:2008]</option>
+                </select>
+              </div>
+
+              <div class="dialog-tabs" id="pdfDialogTabs">
+                <button class="dtab active" data-dtab="general">General</button>
+                <button class="dtab" data-dtab="compression">Compression</button>
+                <button class="dtab" data-dtab="marks">Marks &amp; Bleed</button>
+                <button class="dtab" data-dtab="output">Output</button>
+              </div>
+
+              <div id="pdfPanelGeneral" class="dpanel active controls-stack">
+                <div class="control-group">
+                  <label>PDF Standard</label>
+                  <select id="pdfStandard" class="select-input">
+                    <option value="none">None (Standard PDF)</option>
+                    <option value="x1a">PDF/X-1a:2001 (Legacy Flattened CMYK)</option>
+                    <option value="x4">PDF/X-4:2008 (Modern Live Transparency)</option>
+                  </select>
+                </div>
+                <label class="check-row">
+                  <input id="pdfSpreads" type="checkbox" checked />
+                  <span>Export as Reader Spreads (Uncheck for Press 1-Up Pages)</span>
+                </label>
+              </div>
+
+              <div id="pdfPanelCompression" class="dpanel controls-stack">
+                <div class="control-group">
+                  <label>Color Images Resolution</label>
+                  <select id="pdfDpi" class="select-input">
+                    <option value="72">72 DPI (Screen Only — Blurry in Print)</option>
+                    <option value="150">150 DPI (Draft / Wide Format)</option>
+                    <option value="300">300 DPI (Commercial Offset Press)</option>
+                    <option value="600">600 DPI (Oversized RIP File)</option>
+                  </select>
+                </div>
+                <div class="control-group">
+                  <label>Compression</label>
+                  <select id="pdfComp" class="select-input">
+                    <option value="jpeg_low">JPEG (Low — Blocky Artifacts)</option>
+                    <option value="jpeg_max">JPEG (Maximum — Standard Print)</option>
+                    <option value="zip">ZIP (Lossless — Fine Art / Sharp Linework)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="pdfPanelMarks" class="dpanel controls-stack">
+                <label class="check-row"><input id="pdfCropMarks" type="checkbox" /> <span>Crop Marks (Trim Marks)</span></label>
+                <label class="check-row"><input id="pdfBleedMarks" type="checkbox" /> <span>Bleed Marks</span></label>
+                <label class="check-row"><input id="pdfRegMarks" type="checkbox" /> <span>Registration Marks (Plate Crosshairs)</span></label>
+                <label class="check-row"><input id="pdfColorBars" type="checkbox" /> <span>CMYK Color Bars</span></label>
+                <label class="check-row"><input id="pdfPageInfo" type="checkbox" /> <span>Page Information Slug</span></label>
+                <div class="control-group">
+                  <label>Bleed Allowance <span id="pdfBleedVal" class="mono-val">0 mm</span></label>
+                  <input id="pdfBleed" type="range" min="0" max="5" step="1" value="0" class="studio-slider" />
+                </div>
+              </div>
+
+              <div id="pdfPanelOutput" class="dpanel controls-stack">
+                <div class="control-group">
+                  <label>Color Conversion</label>
+                  <select id="pdfColorConv" class="select-input">
+                    <option value="none">No Color Conversion</option>
+                    <option value="preserve">Convert to Destination (Preserve Numbers)</option>
+                  </select>
+                </div>
+                <div class="control-group">
+                  <label>Destination ICC Profile</label>
+                  <select id="pdfProfile" class="select-input">
+                    <option value="srgb">sRGB IEC61966-2.1 (RGB Trap)</option>
+                    <option value="fogra39">Coated FOGRA39 (ISO 12647-2)</option>
+                    <option value="swop">U.S. Web Coated (SWOP) v2</option>
+                    <option value="gracol">GRACoL 2006 Coated</option>
+                    <option value="uncoated">Uncoated FOGRA29</option>
+                  </select>
+                </div>
+                <label class="check-row"><input id="pdfIncludeProfile" type="checkbox" /> <span>Include Destination Output Profile</span></label>
+                <label class="check-row"><input id="pdfConvertSpots" type="checkbox" /> <span>Ink Manager: Convert All Spots to Process</span></label>
+              </div>
+
+              <div id="pdfLiveChecks" class="diag-list"></div>
+
+              <div class="dialog-footer">
+                <button id="pdfResetBtn" class="btn btn-outline btn-sm" type="button">Reset</button>
+                <button id="pdfExportBtn" class="btn btn-cyan btn-sm" type="button">Export Print-Ready PDF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 5. ID vs QXP SHOWDOWN QUIZ ==================== -->
+      <section id="tab-showdown" class="tab-panel">
+        <div class="studio-card quiz-card">
+          <div class="card-head">
+            <div>
+              <h2>InDesign vs. QuarkXPress Terminology Showdown</h2>
+              <p class="muted">Translate real desktop publishing features and shortcuts across both industry tools.</p>
+            </div>
+            <span id="quizCounter" class="mono-tag cyan">Q 1 / 6</span>
+          </div>
+          <div id="quizBody"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast Banner -->
+  <div id="studioToast" class="studio-toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
